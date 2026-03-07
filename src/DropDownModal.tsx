@@ -58,7 +58,9 @@ const DropDownModal: React.FC<DropDownModalProps> = ({
 
   const selectContent = (item: DropdownItem) => {
     setState(item);
-    toggleVisibility();
+    if (!multiple) {
+      toggleVisibility();
+    }
   };
 
   const renderSearchItem = (item: DropdownItem) => (
@@ -66,8 +68,15 @@ const DropDownModal: React.FC<DropDownModalProps> = ({
       onPress={() => selectContent(item)}
       key={JSON.stringify(item)}
       style={styles.searchItemContainer}
+      testID={`dropdown-item-${item.id ?? item.value}`}
     >
-      {item.icon && <Image source={{ uri: item.icon }} style={styles.icon} />}
+      {item.icon && (
+        <Image
+          source={{ uri: item.icon }}
+          style={styles.icon}
+          testID="item-icon"
+        />
+      )}
       <Text
         style={{
           ...styles.searchItemText,
@@ -83,6 +92,7 @@ const DropDownModal: React.FC<DropDownModalProps> = ({
               ? Colors.PRIMARY
               : '#988F8A',
         }}
+        testID={`item-text-${item.id ?? item.value}`}
       >
         {item[dropDownSearchKey]}
       </Text>
@@ -189,14 +199,19 @@ const DropDownModal: React.FC<DropDownModalProps> = ({
       transparent
       onShow={onShow}
       animationType="slide"
+      testID="dropdown-modal"
     >
-      <View style={styles.dropDownMainContainer}>
-        {/* eslint-disable-next-line react-native/no-inline-styles */}
-        <TouchableOpacity onPress={toggleVisibility} style={{ flex: 0.35 }} />
-        <View style={styles.dropDownContainer}>
+      <View style={styles.dropDownMainContainer} testID="modal-main-container">
+        <TouchableOpacity
+          onPress={toggleVisibility}
+          style={styles.modalBackdrop}
+          testID="modal-backdrop"
+        />
+        <View style={styles.dropDownContainer} testID="modal-content-container">
           <TouchableOpacity
             onPress={toggleVisibility}
             style={styles.svgContainer}
+            testID="cancel-button"
           >
             <CancelIcon
               height={CHANGE_BY_MOBILE_DPI(15)}
@@ -210,13 +225,20 @@ const DropDownModal: React.FC<DropDownModalProps> = ({
             searchIcon
           />
           {!dataList ? (
-            <View style={styles.topSpace}>{loadingLoader}</View>
+            <View style={styles.topSpace} testID="loading-container">
+              {loadingLoader}
+            </View>
           ) : dataList.length === 0 ? (
-            <View style={styles.topSpace}>
-              <Text style={styles.noDataText}>"No Data Found"</Text>
+            <View style={styles.topSpace} testID="no-data-container">
+              <Text style={styles.noDataText} testID="no-data-text">
+                "No Data Found"
+              </Text>
             </View>
           ) : (
-            <ScrollView contentContainerStyle={styles.dropDownListContainer}>
+            <ScrollView
+              contentContainerStyle={styles.dropDownListContainer}
+              testID="dropdown-list"
+            >
               {searchList.map(renderSearchItem)}
             </ScrollView>
           )}
@@ -232,6 +254,9 @@ const createStyles = () =>
       flex: 1,
       backgroundColor: '#524B4560',
       justifyContent: 'flex-end',
+    },
+    modalBackdrop: {
+      flex: 0.35,
     },
     dropDownContainer: {
       flex: 0.65,

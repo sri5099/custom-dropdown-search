@@ -88,29 +88,36 @@ const CustomDropDown: React.FC<CustomDropDownProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultValue]);
 
+  const getPlaceholderTextStyle = () => {
+    return [
+      styles.placeHolderText,
+      { color: selectedValue ? Colors.BLACK : '#00000033' },
+    ];
+  };
+
   return (
-    <View style={[styles.mainContainer, containerStyle]}>
+    <View
+      style={[styles.mainContainer, externalContainerStyle]}
+      testID="dropdown-main-container"
+    >
       {externalPlaceholder && (
-        <Text style={[styles.externalText, externalPlaceholderStyle]}>
+        <Text
+          style={[styles.externalText, externalPlaceholderStyle]}
+          testID="external-placeholder"
+        >
           {externalPlaceholder}
         </Text>
       )}
       <TouchableOpacity
         disabled={disabled}
         onPress={toggleModalVisibility}
-        style={[
-          styles.container,
-          error ? styles.error : {},
-          externalContainerStyle,
-        ]}
+        style={[styles.container, error ? styles.error : {}, containerStyle]}
+        testID="dropdown-touchable"
       >
         <Text
           numberOfLines={1}
-          style={[
-            styles.placeHolderText,
-            // eslint-disable-next-line react-native/no-inline-styles
-            { color: selectedValue ? Colors.BLACK : '#00000033' },
-          ]}
+          style={getPlaceholderTextStyle()}
+          testID="dropdown-selected-text"
         >
           {multiple
             ? (selectedValue as DropdownItem[])
@@ -120,7 +127,7 @@ const CustomDropDown: React.FC<CustomDropDownProps> = ({
               ? (selectedValue as DropdownItem)[dropDownSearchKey]
               : placeHolder}
         </Text>
-        <DownArrow />
+        <DownArrow testID="down-arrow-icon" />
         <DropDownModal
           visibility={modalVisibility}
           toggleVisibility={toggleModalVisibility}
@@ -132,7 +139,11 @@ const CustomDropDown: React.FC<CustomDropDownProps> = ({
           multiple={multiple}
         />
       </TouchableOpacity>
-      {error && <Text style={styles.errorText}>{error}</Text>}
+      {error && (
+        <Text style={styles.errorText} testID="error-text">
+          {error}
+        </Text>
+      )}
     </View>
   );
 };
