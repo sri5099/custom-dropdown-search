@@ -1,6 +1,6 @@
 {
   "name": "react-native-custom-dropdown-search",
-  "version": "0.3.23",
+  "version": "0.3.27",
   "description": "custom component for drop down and in built search for the list",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",

@@ -5,9 +5,9 @@ import {
   StyleSheet,
   type ViewStyle,
   type TextStyle,
+  Text,
 } from 'react-native';
 import { Colors, Fonts, CHANGE_BY_MOBILE_DPI } from '../global';
-import SearchIcon from '../assets/searchIcon.svg';
 
 interface CustomTextInputProps {
   value?: string;
@@ -35,13 +35,7 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
       style={[styles.container, containerStyle]}
       testID="text-input-container"
     >
-      {searchIcon && (
-        <SearchIcon
-          width={CHANGE_BY_MOBILE_DPI(16)}
-          height={CHANGE_BY_MOBILE_DPI(16)}
-          testID="search-icon"
-        />
-      )}
+      {searchIcon && <Text style={styles.searchIcon}>🔍</Text>}
       <TextInput
         style={[styles.input, inputStyle]}
         value={value}
@@ -76,6 +70,7 @@ const createStyles = () =>
       paddingVertical: CHANGE_BY_MOBILE_DPI(12),
       marginLeft: CHANGE_BY_MOBILE_DPI(8),
     },
+    searchIcon: { fontSize: 18 },
   });
 
 export default CustomTextInput;

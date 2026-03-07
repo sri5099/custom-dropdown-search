@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import type { ViewStyle, TextStyle } from 'react-native';
 import { Colors, Fonts, CHANGE_BY_MOBILE_DPI } from './global';
-
-import DownArrow from './assets/downArrow.svg';
 import DropDownModal from './DropDownModal';
 
 export interface DropdownItem {
@@ -86,26 +84,19 @@ const CustomDropDown: React.FC<CustomDropDownProps> = ({
     }
   }, [defaultValue, dropDownList, multiple]);
 
-  const getPlaceholderTextStyle = () => {
-    return [
-      styles.placeHolderText,
-      { color: selectedValue ? Colors.BLACK : '#00000033' },
-    ];
-  };
-
   return (
     <View
       style={[styles.mainContainer, externalContainerStyle]}
       testID="dropdown-main-container"
     >
-      {externalPlaceholder && (
+      {externalPlaceholder ? (
         <Text
           style={[styles.externalText, externalPlaceholderStyle]}
           testID="external-placeholder"
         >
           {externalPlaceholder}
         </Text>
-      )}
+      ) : null}
       <TouchableOpacity
         disabled={disabled}
         onPress={toggleModalVisibility}
@@ -114,7 +105,10 @@ const CustomDropDown: React.FC<CustomDropDownProps> = ({
       >
         <Text
           numberOfLines={1}
-          style={getPlaceholderTextStyle()}
+          style={[
+            styles.placeHolderText,
+            selectedValue ? styles.selectedText : styles.placeholderColor,
+          ]}
           testID="dropdown-selected-text"
         >
           {multiple
@@ -125,7 +119,7 @@ const CustomDropDown: React.FC<CustomDropDownProps> = ({
               ? (selectedValue as DropdownItem)[dropDownSearchKey]
               : placeHolder}
         </Text>
-        <DownArrow testID="down-arrow-icon" />
+        <Text>▼</Text>
       </TouchableOpacity>
       <DropDownModal
         visibility={modalVisibility}
@@ -137,11 +131,11 @@ const CustomDropDown: React.FC<CustomDropDownProps> = ({
         dropDownSearchKey={dropDownSearchKey}
         multiple={multiple}
       />
-      {error && (
+      {error ? (
         <Text style={styles.errorText} testID="error-text">
           {error}
         </Text>
-      )}
+      ) : null}
     </View>
   );
 };
@@ -196,6 +190,12 @@ const styles = StyleSheet.create({
     fontSize: CHANGE_BY_MOBILE_DPI(15),
     fontFamily: Fonts.MEDIUM,
     flex: 1,
+  },
+  selectedText: {
+    color: Colors.BLACK,
+  },
+  placeholderColor: {
+    color: '#00000033',
   },
 });
 
