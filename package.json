@@ -1,6 +1,6 @@
 {
   "name": "react-native-custom-dropdown-search",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "custom component for drop down and in built search for the list",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
@@ -81,6 +81,12 @@
     "react-native-builder-bob": "^0.40.13",
     "release-it": "^19.0.4",
     "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "moment": "^2.29.4",
+    "react-native-svg": "^13.12.0",
+    "react-native-toast-message": "^2.1.5"
   },
   "peerDependencies": {
     "react": "*",

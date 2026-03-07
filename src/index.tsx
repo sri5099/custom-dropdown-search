@@ -1,3 +1,2 @@
-export function multiply(a: number, b: number): number {
-  return a * b;
-}
+export { default as CustomDropDown } from './CustomDropDown';
+export { default as DropDownModal } from './DropDownModal';

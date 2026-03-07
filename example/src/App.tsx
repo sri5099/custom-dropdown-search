@@ -1,12 +1,9 @@
 import { Text, View, StyleSheet } from 'react-native';
-import { multiply } from 'react-native-custom-dropdown-search';
-
-const result = multiply(3, 7);
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Text>Result: inprogress</Text>
     </View>
   );
 }
