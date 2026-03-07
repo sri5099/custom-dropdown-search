@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import { Colors, Fonts, CHANGE_BY_MOBILE_DPI } from './global';
 import CustomTextInput from './components/CustomTextInput';
-import CancelIcon from '../assets/svgs/Close.svg';
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
 import type { DropdownItem } from './CustomDropDown';
@@ -213,10 +212,7 @@ const DropDownModal: React.FC<DropDownModalProps> = ({
             style={styles.svgContainer}
             testID="cancel-button"
           >
-            <CancelIcon
-              height={CHANGE_BY_MOBILE_DPI(15)}
-              width={CHANGE_BY_MOBILE_DPI(15)}
-            />
+            <Text style={styles.closeButton}>✕</Text>
           </TouchableOpacity>
           <CustomTextInput
             setValue={searchData}
@@ -298,6 +294,11 @@ const createStyles = () =>
       alignItems: 'flex-end',
       marginVertical: CHANGE_BY_MOBILE_DPI(15),
       marginRight: CHANGE_BY_MOBILE_DPI(15),
+    },
+    closeButton: {
+      fontSize: CHANGE_BY_MOBILE_DPI(20),
+      color: Colors.TEXT_COLOR,
+      fontWeight: 'bold',
     },
     noDataText: {
       color: Colors.TEXT_COLOR,

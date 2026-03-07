@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import type { ViewStyle, TextStyle } from 'react-native';
-// Update the import path if the file exists elsewhere, for example:
 import { Colors, Fonts, CHANGE_BY_MOBILE_DPI } from './global';
 
-import DownArrow from '../assets/downArrow.svg';
+import DownArrow from './assets/downArrow.svg';
 import DropDownModal from './DropDownModal';
 
 export interface DropdownItem {
