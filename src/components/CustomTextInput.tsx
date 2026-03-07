@@ -7,7 +7,7 @@ import {
   type TextStyle,
 } from 'react-native';
 import { Colors, Fonts, CHANGE_BY_MOBILE_DPI } from '../global';
-import SearchIcon from '../assets/svgs/Search.svg';
+import SearchIcon from '../assets/searchIcon.svg';
 
 interface CustomTextInputProps {
   value?: string;

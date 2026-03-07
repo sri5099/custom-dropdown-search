@@ -84,8 +84,7 @@ const CustomDropDown: React.FC<CustomDropDownProps> = ({
     } else {
       setSelectedValue(defaultValue as DropdownItem | null);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultValue]);
+  }, [defaultValue, dropDownList, multiple]);
 
   const getPlaceholderTextStyle = () => {
     return [
@@ -127,17 +126,17 @@ const CustomDropDown: React.FC<CustomDropDownProps> = ({
               : placeHolder}
         </Text>
         <DownArrow testID="down-arrow-icon" />
-        <DropDownModal
-          visibility={modalVisibility}
-          toggleVisibility={toggleModalVisibility}
-          dropDownList={dropDownList}
-          setState={setValue}
-          state={selectedValue}
-          endPoint={endPoint}
-          dropDownSearchKey={dropDownSearchKey}
-          multiple={multiple}
-        />
       </TouchableOpacity>
+      <DropDownModal
+        visibility={modalVisibility}
+        toggleVisibility={toggleModalVisibility}
+        dropDownList={dropDownList}
+        setState={setValue}
+        state={selectedValue}
+        endPoint={endPoint}
+        dropDownSearchKey={dropDownSearchKey}
+        multiple={multiple}
+      />
       {error && (
         <Text style={styles.errorText} testID="error-text">
           {error}
