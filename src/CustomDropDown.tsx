@@ -4,18 +4,14 @@ import type { ViewStyle, TextStyle } from 'react-native';
 import { Colors, Fonts, CHANGE_BY_MOBILE_DPI } from './global';
 import DropDownModal from './DropDownModal';
 
-export interface DropdownItem {
-  id?: string | number;
-  value?: string | number;
-  [key: string]: any;
-}
+export type DropdownItem = Record<string, any>;
 
-export interface CustomDropDownProps {
+export interface CustomDropDownProps<T extends DropdownItem = DropdownItem> {
   placeHolder?: string;
   containerStyle?: ViewStyle;
-  dropDownList?: DropdownItem[];
-  setState: (selected: DropdownItem | DropdownItem[]) => void;
-  defaultValue?: string | number | DropdownItem[];
+  dropDownList?: T[];
+  setState: (selected: T | T[]) => void;
+  defaultValue?: string | number | T[] | null;
   disabled?: boolean;
   externalPlaceholder?: string;
   endPoint?: string;
@@ -26,7 +22,7 @@ export interface CustomDropDownProps {
   externalContainerStyle?: ViewStyle;
 }
 
-const CustomDropDown: React.FC<CustomDropDownProps> = ({
+const CustomDropDown = <T extends DropdownItem = DropdownItem>({
   placeHolder,
   containerStyle = {},
   dropDownList = [],
@@ -40,47 +36,57 @@ const CustomDropDown: React.FC<CustomDropDownProps> = ({
   multiple = false,
   externalPlaceholderStyle = {},
   externalContainerStyle = {},
-}) => {
-  const [selectedValue, setSelectedValue] = useState<
-    DropdownItem | DropdownItem[] | null
-  >(multiple ? [] : null);
-  const [modalVisibility, setModalVisibility] = useState<boolean>(false);
+}: CustomDropDownProps<T>) => {
+  const [selectedValue, setSelectedValue] = useState<T | T[] | null>(
+    multiple ? [] : null
+  );
+  const [modalVisibility, setModalVisibility] = React.useState<boolean>(false);
 
   const toggleModalVisibility = () => setModalVisibility(!modalVisibility);
 
-  const setValue = (data: DropdownItem) => {
+  const setValue = (data: T) => {
     if (multiple) {
-      const selectedArray = selectedValue as DropdownItem[];
-      if (
-        selectedArray.some((e) => (e.id ?? e.value) === (data.id ?? data.value))
-      ) {
-        let arr = selectedArray.filter(
+      const selectedArray = (selectedValue as T[]) || [];
+      const isSelected = selectedArray.some(
+        (e) => (e.id ?? e.value) === (data.id ?? data.value)
+      );
+
+      let arr: T[];
+      if (isSelected) {
+        arr = selectedArray.filter(
           (e) => (e.id ?? e.value) !== (data.id ?? data.value)
         );
-        setSelectedValue(arr);
-        setState(arr);
       } else {
-        let arr = [...selectedArray, data];
-        setSelectedValue(arr);
-        setState(arr);
+        arr = [...selectedArray, data];
       }
+
+      setSelectedValue(arr);
+      setState(arr);
     } else {
-      setState(data);
       setSelectedValue(data);
+      setState(data);
+      toggleModalVisibility();
     }
   };
 
   useEffect(() => {
-    if (dropDownList.length > 0) {
-      if (multiple) {
-        setSelectedValue((defaultValue ?? []) as DropdownItem[]);
+    if (multiple) {
+      if (Array.isArray(defaultValue)) {
+        setSelectedValue(defaultValue as T[]);
       } else {
-        setSelectedValue(
-          dropDownList.find((e) => (e.id ?? e.value) === defaultValue) ?? null
-        );
+        setSelectedValue([]);
       }
     } else {
-      setSelectedValue(defaultValue as DropdownItem | null);
+      if (dropDownList.length > 0) {
+        const found = dropDownList.find(
+          (e) => (e.id ?? e.value) === defaultValue
+        );
+        setSelectedValue(found ?? null);
+      } else if (defaultValue && typeof defaultValue === 'object') {
+        setSelectedValue(defaultValue as unknown as T);
+      } else {
+        setSelectedValue(null);
+      }
     }
   }, [defaultValue, dropDownList, multiple]);
 
@@ -112,11 +118,9 @@ const CustomDropDown: React.FC<CustomDropDownProps> = ({
           testID="dropdown-selected-text"
         >
           {multiple
-            ? (selectedValue as DropdownItem[])
-                .map((u) => u[dropDownSearchKey])
-                .join(', ')
+            ? (selectedValue as T[]).map((u) => u[dropDownSearchKey]).join(', ')
             : selectedValue
-              ? (selectedValue as DropdownItem)[dropDownSearchKey]
+              ? (selectedValue as T)[dropDownSearchKey]
               : placeHolder}
         </Text>
         <Text>▼</Text>

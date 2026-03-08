@@ -16,20 +16,20 @@ import moment from 'moment';
 import type { DropdownItem } from './CustomDropDown';
 import axiosInstance from './global/api-core';
 
-export interface DropDownModalProps {
-  dropDownList: DropdownItem[];
+export interface DropDownModalProps<T extends DropdownItem = DropdownItem> {
+  dropDownList: T[];
   visibility?: boolean;
   toggleVisibility?: () => void;
   onRequestClose?: () => void;
-  setState: (selected: DropdownItem) => void;
-  state: DropdownItem | DropdownItem[] | null;
+  setState: (selected: T) => void;
+  state: T | T[] | null;
   showSearch?: boolean;
   endPoint?: string;
   dropDownSearchKey: string;
   multiple?: boolean;
 }
 
-const DropDownModal: React.FC<DropDownModalProps> = ({
+const DropDownModal = <T extends DropdownItem = DropdownItem>({
   dropDownList,
   visibility = false,
   toggleVisibility = () => {},
@@ -39,11 +39,11 @@ const DropDownModal: React.FC<DropDownModalProps> = ({
   endPoint = '',
   dropDownSearchKey,
   multiple = false,
-}) => {
+}: DropDownModalProps<T>) => {
   const styles = createStyles();
   const loadingLoader = <ActivityIndicator size="small" color="#988F8A" />;
-  const [searchList, setSearchList] = useState<DropdownItem[]>(dropDownList);
-  const [dataList, setDataList] = useState<DropdownItem[]>(dropDownList);
+  const [searchList, setSearchList] = useState<T[]>(dropDownList);
+  const [dataList, setDataList] = React.useState<T[]>(dropDownList);
 
   const searchData = (text: string) => {
     const response = dataList.filter((item) =>
@@ -55,14 +55,14 @@ const DropDownModal: React.FC<DropDownModalProps> = ({
     setSearchList(response);
   };
 
-  const selectContent = (item: DropdownItem) => {
+  const selectContent = (item: T) => {
     setState(item);
     if (!multiple) {
       toggleVisibility();
     }
   };
 
-  const renderSearchItem = (item: DropdownItem) => (
+  const renderSearchItem = (item: T) => (
     <TouchableOpacity
       onPress={() => selectContent(item)}
       key={JSON.stringify(item)}
@@ -80,14 +80,13 @@ const DropDownModal: React.FC<DropDownModalProps> = ({
         style={{
           ...styles.searchItemText,
           color: multiple
-            ? (state as DropdownItem[]).some(
+            ? (state as T[]).some(
                 (e) => (e.id ?? e.value) === (item.id ?? item.value)
               )
               ? Colors.PRIMARY
               : '#988F8A'
             : state &&
-                (state as DropdownItem)[dropDownSearchKey] ===
-                  item[dropDownSearchKey]
+                (state as T)[dropDownSearchKey] === item[dropDownSearchKey]
               ? Colors.PRIMARY
               : '#988F8A',
         }}

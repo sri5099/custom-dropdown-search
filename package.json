@@ -1,9 +1,12 @@
 {
   "name": "react-native-custom-dropdown-search",
-  "version": "0.3.27",
+  "version": "0.3.28",
   "description": "custom component for drop down and in built search for the list",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "exports": {
     ".": {
       "source": "./src/index.tsx",
@@ -38,7 +41,13 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "clean": "del-cli lib",
     "prepare": "bob build",
-    "release": "release-it --only-version"
+    "release": "release-it",
+    "release:patch": "release-it patch",
+    "release:minor": "release-it minor",
+    "release:major": "release-it major",
+    "version:patch": "npm version patch --no-git-tag-version",
+    "version:minor": "npm version minor --no-git-tag-version",
+    "version:major": "npm version major --no-git-tag-version"
   },
   "keywords": [
     "react-native",
